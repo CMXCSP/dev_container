@@ -21,6 +21,7 @@ services:
         target: /home/${DEFAULT_USER:?}/workspace
     depends_on:
       - mariadb
+      - mongodb
     environment:
       PHP_ERROR_REPORTING: E_ALL
       TZ: ${TIME_ZONE:-UTC}
@@ -32,3 +33,12 @@ services:
     environment:
       TZ: ${TIME_ZONE:-UTC}
       MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:-root}
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
+    hostname: mongodb 
+    environment:
+      TZ: ${TIME_ZONE:-UTC}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-admin}

@@ -72,5 +72,3 @@ RUN ln -s /home/${DEFAULT_USER}/.composer/vendor/bin/laravel /home/${DEFAULT_USE
 
 RUN echo '<?php phpinfo();' > /var/www/html/info.php
 RUN echo '<?php include "./info.php";' > /var/www/html/index.php
-
-COPY .vimrc /home/${DEFAULT_USER}/.vimrc

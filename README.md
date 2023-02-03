@@ -11,13 +11,14 @@ TIME_ZONE=America/Mexico_City
 ```
 
 Dentro de la raiz de esta carpeta ejecutar.
-``` docker compose -f docker-compose-without-mongo.yml up -d ```
+``` docker compose up -d ``` __o__
+``` docker compose -f docker-compose-with-mongo.yml up -d ```
 Si aparece un error borrar la carpeta **.docker** en la carpeta raiz del usuario
 
-Entramos al contenedor que contiene la base de datos, para crear interactivamente con la terminal la base de datos que requerimos
-``` docker exec -it development-mariadb-1 mariadb -h localhost -u root -p mysql ```
+Entramos al contenedor del motor de la base de datos _mariadb_, para crear interactivamente con la terminal la base de datos que requerimos
+``` docker exec -it dev_container-mariadb-1 mariadb -h localhost -u root -p mysql ```
 
-Entramos al contenedor development para utilizar su terminal
+Entramos al contenedor _development_ para utilizar su terminal
 ``` docker exec -it development bash ```
 y crear los enlaces simbólico al workspace, instalar composer y las dependencias para el funcionamiento del sitio si fuera necesario o bien comprobar que existen.
 
@@ -29,17 +30,16 @@ ls -la /var/www/html
 ln -s /home/username/workspace/REPOSITORIO_DE_TRABAJO/public/ /var/www/html/REPOSITORIO_DE_TRABAJO
 ```
 
-Considere que REPOSITORIO_DE_TRABAJO es el nombre del directorio raiz donde esta almacenado el proyecto web. Por lo que se debe crear el archivo __.env__ en la raiz, con las variables de entorno. **DB_HOST** corresponde a la **IPAddress** del contenedor de mariadb mostrada por ``` docker inspect development-mariadb-1 ```
+Considere que REPOSITORIO_DE_TRABAJO es el nombre del directorio raiz donde esta almacenado el proyecto web, y corresponde al mismo directorio del anfitrión. Por lo que se debe crear el archivo __.env__ en la raiz, con las variables de entorno. **DB_HOST** corresponde a la **IPAddress** del contenedor de mariadb mostrada por ``` docker inspect dev_container-mariadb-1 ``` puede usar ``` docker inspect dev_container-mariadb-1 | grep "IPAddress" ``` para mostrar la IP a usar.
 ```
-DB_HOST="localhost"
+DB_HOST="172.18.0.2"
 DB_NAME="dbname"
 DB_USERNAME="dbusername"
 DB_PASSWORD=""
 ```
 
-Dentro de la misma raiz encontramos el archivo __composer.json__ para proceder con la instalacion de dependencias.
+Dentro de la misma raiz encontramos el archivo __composer.json__ para proceder con la instalacion de dependencias. Considera que debe estar dentro del workspace del huesped ``` cd /home/username/workspace/REPOSITORIO_DE_TRABAJO/ ```.
 ```
-cd workspace/REPOSITORIO_DE_TRABAJO
 composer install
 composer dump-autoload
 composer dbinstall
@@ -52,10 +52,12 @@ ls -la /etc/apache2/
 cd /etc/apache2/sites-available/
 cat 000-default.conf > REPOSITORIO_DE_TRABAJO.conf
 ```
+
 Se deben editar las siguientes lineas, en el archivo [REPOSITORIO_DE_TRABAJO.conf](REPOSITORIO_DE_TRABAJO.conf) se puede observar un ejemplo:
  - #ServerName www.example.com
  - ServerAdmin webmaster@localhost
  - DocumentRoot /var/www/html
+
 Tambien revisamos con ```cat /etc/hosts``` que se encuentre la **IPAddress** del servidor _development_ en dicho archivo. Y salimos de la terminal del contenedor.
 
 Reiniciamos los contenedores con ``` docker compose restart ```

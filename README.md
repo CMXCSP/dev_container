@@ -71,8 +71,11 @@ Podemos consultar que contenedores e imagenes existen con:
 ``` docker compose ps -a ```
 
 Consultamos la configuracion de variables del contenedor, particularmente nos interesa **IPAddress**
-``` docker inspect development-mariadb-1 ```
+
+``` docker inspect dev_container-mariadb-1 ```
+
 ``` docker inspect development ```
+
 
 Levantar ``` docker compose up -d ```
 Encender ``` docker compose start ```
@@ -83,5 +86,5 @@ Apagar ``` docker compose stop ```
  - No olvide Cambiar _REPOSITORIO_DE_TRABAJO_ por el nombre la carpeta donde se almacena el proyecto.
  - Agregar o cambiar la direccion IP de la base de datos en el archivo __.env__ del proyecto
  - El password del usuario root para el contenedor es _'asdf1234'_ puede cambiarse en el [Dockerfile](Dockerfile)
- - El password del usuario root para el contenedor de mariadb es _'root'_ puede cambiarse en el [docker-compose.yml](docker-compose.yml) o [docker-compose-without-mongo.yml](docker-compose-without-mongo.yml)
+ - El password del usuario root para el contenedor de mariadb es _'root'_ puede cambiarse en el [docker-compose.yml](docker-compose.yml) o [docker-compose-with-mongo.yml](docker-compose-with-mongo.yml)
 

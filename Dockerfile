@@ -1,4 +1,4 @@
-FROM php:8.1-apache
+FROM php:8.0-apache
 
 ARG DEFAULT_USER=username
 ARG NODE_VERSION=19.4
